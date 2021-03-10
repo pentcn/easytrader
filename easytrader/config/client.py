@@ -80,7 +80,7 @@ class CommonConfig:
 
 
 class YH(CommonConfig):
-    DEFAULT_EXE_PATH = r"C:\双子星-中国银河证券\Binarystar.exe"
+    DEFAULT_EXE_PATH = r"c:\双子星金融终端-中国银河证券\BinaryStar.exe"
 
     BALANCE_GRID_CONTROL_ID = 1308
 
@@ -143,6 +143,7 @@ class GJ(CommonConfig):
 
     AUTO_IPO_MENU_PATH = ["新股申购", "新股批量申购"]
 
+
 class GF(CommonConfig):
     DEFAULT_EXE_PATH = "C:\\gfzqrzrq\\xiadan.exe"
     TITLE = "核新网上交易系统"
@@ -160,6 +161,7 @@ class GF(CommonConfig):
     }
 
     AUTO_IPO_MENU_PATH = ["新股申购", "批量新股申购"]
+
 
 class WK(HT):
     pass
