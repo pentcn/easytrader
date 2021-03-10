@@ -90,7 +90,7 @@ class YHClientTrader(clienttrader.BaseLoginClientTrader):
 
     def _handle_verify_code(self, is_xiadan):
         control = self._app.top_window().child_window(
-            control_id=1499 if is_xiadan else 22202
+            control_id=0x56ba if is_xiadan else 22202
         )
         control.click()
 

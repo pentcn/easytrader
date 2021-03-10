@@ -3,6 +3,8 @@ import os
 import sys
 import time
 import unittest
+import requests
+import base64
 
 sys.path.append(".")
 

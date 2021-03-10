@@ -1,9 +1,42 @@
 import re
 
 import requests
+import base64
 from PIL import Image
 
 from easytrader import exceptions
+
+
+class CodeDemo:
+    def __init__(self, AK, SK, code_url, img_path):
+        self.AK = AK
+        self.SK = SK
+        self.code_url = code_url
+        self.img_path = img_path
+        self.access_token = self.get_access_token()
+
+    def get_access_token(self):
+        token_host = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={ak}&client_secret={sk}'.format(
+            ak=self.AK, sk=self.SK)
+        header = {'Content-Type': 'application/json; charset=UTF-8'}
+        response = requests.post(url=token_host, headers=header)
+        content = response.json()
+        access_token = content.get("access_token")
+        return access_token
+
+    def getCode(self):
+        header = {
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+
+        def read_img():
+            with open(self.img_path, "rb")as f:
+                return base64.b64encode(f.read()).decode()
+
+        image = read_img()
+        response = requests.post(url=self.code_url, data={
+                                 "image": image, "access_token": self.access_token}, headers=header)
+        return response.json()
 
 
 def captcha_recognize(img_path):
@@ -40,15 +73,15 @@ def recognize_verify_code(image_path, broker="ht"):
 
 
 def detect_yh_client_result(image_path):
-    """封装了tesseract的识别，部署在阿里云上，
-    服务端源码地址为： https://github.com/shidenggui/yh_verify_code_docker"""
-    api = "http://yh.ez.shidenggui.com:5000/yh_client"
-    with open(image_path, "rb") as f:
-        rep = requests.post(api, files={"image": f})
-    if rep.status_code != 201:
-        error = rep.json()["message"]
-        raise exceptions.TradeError("request {} error: {}".format(api, error))
-    return rep.json()["result"]
+    """用pentcn的账号申请百度的免费文字识别服务"""
+
+    AK = "pvCwVGOC5vEq9tNpctyG3j3h"  # 官网获取的AK
+    SK = "EgLsYDp20YktO7Po1OrDUnKZwqAoltwj"  # 官网获取的SK
+    code_url = "https://aip.baidubce.com/rest/2.0/ocr/v1/accurate"  # 百度图片识别接口地址
+
+    code_obj = CodeDemo(AK=AK, SK=SK, code_url=code_url, img_path=image_path)
+    res = code_obj.getCode()
+    return res.get("words_result")[0].get("words")
 
 
 def input_verify_code_manual(image_path):
