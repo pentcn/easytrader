@@ -90,7 +90,7 @@ class YHClientTrader(clienttrader.BaseLoginClientTrader):
 
     def _handle_verify_code(self, is_xiadan):
         control = self._app.top_window().child_window(
-            control_id=0x56ba if is_xiadan else 22202
+            control_id=0x5DB if is_xiadan else 22202
         )
         control.click()
 
@@ -104,6 +104,8 @@ class YHClientTrader(clienttrader.BaseLoginClientTrader):
         else:
             control.capture_as_image().save(file_path, "jpeg")
         verify_code = recognize_verify_code(file_path, "yh_client")
+        print(file_path)
+        print(verify_code)
         return "".join(re.findall(r"\d+", verify_code))
 
     @property

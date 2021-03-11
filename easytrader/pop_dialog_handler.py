@@ -50,7 +50,8 @@ class PopDialogHandler:
             ).click()
 
     def _submit_by_shortcut(self):
-        self._set_foreground(self._app.top_window())
+        # self._set_foreground(self._app.top_window())
+        self._app.top_window().click()
         self._app.top_window().type_keys("%Y", set_foreground=False)
 
     def _close(self):
