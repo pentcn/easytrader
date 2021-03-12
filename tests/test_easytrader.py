@@ -183,5 +183,49 @@ class TestHTZQClientTrader(unittest.TestCase):
         self._user.auto_ipo()
 
 
+@unittest.skipUnless("tdx" in TEST_CLIENTS and IS_WIN_PLATFORM, "skip tdx test")
+class TestTDXClientTrader(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        import easytrader
+
+        if "tdx" not in TEST_CLIENTS:
+            return
+
+        cls._ACCOUNT = os.environ.get("EZ_TEST_YH_ACCOUNT") or "170000003472"
+        cls._PASSWORD = os.environ.get("EZ_TEST_YH_PASSWORD") or "040619"
+
+        cls._user = easytrader.use("tdx")
+        cls._user.connect()
+        # cls._user.prepare(user=cls._ACCOUNT, password=cls._PASSWORD)
+
+    # def test_asset(self):
+    #     time.sleep(3)
+    #     asset = self._user.asset
+    #     # print(asset)
+
+    # def test_today_entrusts(self):
+    #     time.sleep(3)
+    #     entrust = self._user.today_entrusts
+    #     print(entrust)
+
+    # def test_today_trades(self):
+    #     time.sleep(3)
+    #     entrust = self._user.today_trades
+    #     print(entrust)
+
+    # def test_cancel_entrusts(self):
+    #     time.sleep(3)
+    #     entrust = self._user.cancel_entrusts
+    #     print(entrust)
+
+    # def test_buy(self):
+    #     self._user.buy('512290', 1.7, 100)
+
+    def test_sell(self):
+        self._user.sell('512290', 1.88, 100)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

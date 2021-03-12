@@ -14,6 +14,8 @@ def create(broker):
         return WK
     if broker == "htzq":
         return HTZQ
+    if broker == "tdx":
+        return TDX
     raise NotImplementedError
 
 
@@ -77,6 +79,15 @@ class CommonConfig:
     AUTO_IPO_BUTTON_CONTROL_ID = 1006
     AUTO_IPO_MENU_PATH = ["新股申购", "批量新股申购"]
     AUTO_IPO_NUMBER = '申购数量'
+
+
+class TDX(CommonConfig):
+    DEFAULT_EXE_PATH = 'C:\\new_hbzq\\TdxW.exe'
+    OUTPUT_CONTROL_ID = 1151
+    TRADE_SECURITY_CONTROL_ID = 0x2EE5
+    TRADE_PRICE_CONTROL_ID = 0x2EE6
+    TRADE_AMOUNT_CONTROL_ID = 0x2EE7
+    TRADE_SUBMIT_CONTROL_ID = 0x7DA
 
 
 class YH(CommonConfig):

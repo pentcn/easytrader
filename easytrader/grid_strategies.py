@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 import abc
 import io
+import os
 import tempfile
 from io import StringIO
 from typing import TYPE_CHECKING, Dict, List, Optional
-
+import re
 import pandas as pd
 import pywinauto.keyboard
 import pywinauto
 import pywinauto.clipboard
-
+from time import sleep
 from easytrader.log import logger
 from easytrader.utils.captcha import captcha_recognize
 from easytrader.utils.win_gui import SetForegroundWindow, ShowWindow, win32defines
@@ -219,3 +220,105 @@ class Xls(BaseStrategy):
             na_filter=False,
         )
         return df.to_dict("records")
+
+
+class TDXXls(BaseStrategy):
+    def __init__(self, tmp_folder: Optional[str] = None):
+        """
+        :param tmp_folder: 用于保持临时文件的文件夹
+        """
+        super().__init__()
+        self.tmp_folder = tmp_folder
+        self.header = None
+
+    def set_header(self, header):
+        self.header = header
+
+    def get(self, control_id: int, is_asset=True) -> List[Dict]:
+        button_handle = self._get_handle(
+            control_id, 'Button')
+        if not button_handle.is_enabled():
+            return None
+        button_handle.click()
+        temp_path = tempfile.mktemp(suffix=".xls", dir=self.tmp_folder)
+        self._trader._app.top_window()['输出到Excel表格'].click()
+        self._trader._app.top_window().Edit2.set_edit_text(temp_path)
+        self._trader._app.top_window()['确  定'].click()
+
+        if is_asset:
+            return self._format_grid_data(temp_path)
+
+        return self._format_common_grid_data(temp_path)
+
+    def _get_handle(self, control_id, class_name):
+        count = 2
+        while True:
+            try:
+                handle = self._trader._main.child_window(
+                    control_id=control_id, class_name=class_name
+                )
+                if count <= 0:
+                    return handle
+                # sometime can't find handle ready, must retry
+                handle.wait("ready", 2)
+                return handle
+            # pylint: disable=broad-except
+            except:
+                pass
+            count = count - 1
+
+    def _format_line(self, line):
+        line = line.strip('\n')
+        line = line.replace('=', '')
+        line = line.replace('"', '')
+        return line
+
+    def _format_grid_data(self, file_path):
+        count = 10
+        while count > 0:
+            if os.path.exists(file_path):
+                break
+            sleep(0.2)
+            count -= 0
+
+        stocks = []
+        with open(file_path, 'r') as f:
+            lines = f.readlines()
+            for index, line in enumerate(lines):
+                line = self._format_line(line)
+                fields = re.split('\t', line)
+                fields = [field for field in fields if field != '']
+                if index == 0:
+                    balance_header = fields
+                elif index == 1:
+                    balance = dict(zip(balance_header, fields))
+                elif index == 2:
+                    continue
+                elif index == 3:
+                    stock_header = fields
+                else:
+                    stocks.append(dict(zip(stock_header, fields)))
+
+        return balance, stocks
+
+    def _format_common_grid_data(self, file_path):
+        count = 10
+        while count > 0:
+            if os.path.exists(file_path):
+                break
+            sleep(0.2)
+            count -= 0
+
+        records = []
+        with open(file_path, 'r') as f:
+            lines = f.readlines()
+            for index, line in enumerate(lines):
+                line = self._format_line(line)
+                fields = re.split('\t', line)
+                fields = [field for field in fields if field != '']
+                if index == 0:
+                    header = fields
+                else:
+                    records.append(dict(zip(header, fields)))
+
+        return records
