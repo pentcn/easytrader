@@ -80,10 +80,10 @@ setup(
     version="0.22.0",
     description="A utility for China Stock Trade",
     long_description=long_desc,
-    author="shidenggui",
-    author_email="longlyshidenggui@gmail.com",
+    author="pentcn",
+    author_email="cqdianz@gmail.com",
     license="BSD",
-    url="https://github.com/shidenggui/easytrader",
+    url="https://github.com/pentcn/easytrader",
     keywords="China stock trade",
     install_requires=[
         "requests",

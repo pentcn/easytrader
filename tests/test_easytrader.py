@@ -220,8 +220,8 @@ class TestTDXClientTrader(unittest.TestCase):
     #     entrust = self._user.cancel_entrusts
     #     print(entrust)
 
-    # def test_buy(self):
-    #     self._user.buy('512290', 1.7, 100)
+    def test_buy(self):
+        self._user.buy('512290', 1.7, 100)
 
     def test_sell(self):
         self._user.sell('512290', 1.88, 100)

@@ -82,7 +82,7 @@ class CommonConfig:
 
 
 class TDX(CommonConfig):
-    DEFAULT_EXE_PATH = 'C:\\new_hbzq\\TdxW.exe'
+    DEFAULT_EXE_PATH = 'd:\\new_hbzq\\TdxW.exe'
     OUTPUT_CONTROL_ID = 1151
     TRADE_SECURITY_CONTROL_ID = 0x2EE5
     TRADE_PRICE_CONTROL_ID = 0x2EE6
@@ -92,7 +92,7 @@ class TDX(CommonConfig):
 
 class YH(CommonConfig):
     # DEFAULT_EXE_PATH = r"c:\双子星金融终端-中国银河证券\BinaryStar.exe"
-    DEFAULT_EXE_PATH = r"c:\双子星金融终端-中国银河证券\xiadan.exe"
+    DEFAULT_EXE_PATH = r"D:\双子星新一代行情交易终端\transaction\xiadan.exe"
 
     BALANCE_GRID_CONTROL_ID = 1308
 
