@@ -374,6 +374,12 @@ class TDXClientTrader(IClientTrader):
 
         self._submit_trade()
 
+        self.wait(0.2)
+        try:
+            if self._app.top_window()['确认'].exists():
+                self._app.top_window()['确认'].close()
+        except:
+            pass
         return self._handle_pop_dialogs(
             handler_class=pop_dialog_handler.TradePopDialogHandler
         )

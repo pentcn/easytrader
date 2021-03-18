@@ -221,10 +221,10 @@ class TestTDXClientTrader(unittest.TestCase):
     #     print(entrust)
 
     def test_buy(self):
-        self._user.buy('512290', 1.7, 100)
+        self._user.buy('512290', 1.5, 100)
 
     def test_sell(self):
-        self._user.sell('512290', 1.88, 100)
+        self._user.sell('512290', 2.88, 100)
 
 
 if __name__ == "__main__":
